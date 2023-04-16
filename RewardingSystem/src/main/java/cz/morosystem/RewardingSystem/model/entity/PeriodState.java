@@ -1,4 +1,4 @@
-package cz.morosystem.RewardingSystem.entity;
+package cz.morosystem.RewardingSystem.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -7,17 +7,17 @@ import java.io.Serializable;
 
 @Data
 @Entity
-@Table(name = "current_period_state")
-public class CurrentPeriodState {
+@Table(name = "period_state")
+public class PeriodState {
     @EmbeddedId
-    private CurrentPeriodStateId id;
+    private PeriodStateId id;
 
     @Column(name = "budget")
     private int budget;
 
     @Embeddable
     @Data
-    private class CurrentPeriodStateId implements Serializable {
+    public class PeriodStateId implements Serializable {
 
         @Column(name = "employee_id")
         private Long employeeId;

@@ -1,4 +1,4 @@
-package cz.morosystem.RewardingSystem.entity;
+package cz.morosystem.RewardingSystem.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -10,11 +10,10 @@ public class Reward {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "reward_id")
-    private long id;
+    private Long id;
 
     @Column(name = "amount_of_money", nullable = false)
     private int amountOfMoney;
-
     @Column(name = "draft", nullable = false)
     private boolean draft;
 
@@ -25,9 +24,9 @@ public class Reward {
     private Employee sender;
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "receiver", nullable = false)
-    private Employee receiver ;
+    private Employee receiver;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "period_id")
     private Period period;
 }

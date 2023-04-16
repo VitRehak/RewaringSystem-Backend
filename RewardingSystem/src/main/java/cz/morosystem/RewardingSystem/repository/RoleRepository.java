@@ -1,4 +1,7 @@
 package cz.morosystem.RewardingSystem.repository;
 
-public class RoleRepository {
+import org.springframework.stereotype.Repository;
+
+@Repository
+public interface RoleRepository {
 }

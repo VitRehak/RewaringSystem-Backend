@@ -1,4 +1,4 @@
-package cz.morosystem.RewardingSystem.entity;
+package cz.morosystem.RewardingSystem.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,7 +13,7 @@ public class GroupOfEmployees {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "group_of_employees_id")
-    private long id;
+    private Long id;
 
     @Column(name = "name", length = 50, nullable = false)
     private String name;
@@ -29,5 +29,5 @@ public class GroupOfEmployees {
     @JoinTable(name = "employee_group",
             joinColumns = @JoinColumn(name = "group_of_employees_id"),
             inverseJoinColumns = @JoinColumn(name = "employee_id"))
-    private List<Role> members = new ArrayList<>();
+    private List<Employee> members = new ArrayList<>();
 }

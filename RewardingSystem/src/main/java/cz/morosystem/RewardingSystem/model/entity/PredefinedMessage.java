@@ -1,4 +1,4 @@
-package cz.morosystem.RewardingSystem.entity;
+package cz.morosystem.RewardingSystem.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -11,7 +11,7 @@ public class PredefinedMessage {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "predefined_message_id")
-    private long id;
+    private Long id;
 
     @Column(name = "text", length = 1000)
     private String text;

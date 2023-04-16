@@ -1,4 +1,4 @@
-package cz.morosystem.RewardingSystem.entity;
+package cz.morosystem.RewardingSystem.model.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -13,7 +13,7 @@ public class Period {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "period_id")
-    private long id;
+    private Long id;
     @Column(name = "billed")
     private boolean billed;
     @Column(name = "start_of_period")
