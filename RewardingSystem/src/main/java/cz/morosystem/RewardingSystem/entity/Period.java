@@ -1,11 +1,9 @@
-package cz.morosystem.RewardingSystem.entities;
+package cz.morosystem.RewardingSystem.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
 
 @Data
 @Entity

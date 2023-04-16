@@ -1,4 +1,4 @@
-package cz.morosystem.RewardingSystem.entities;
+package cz.morosystem.RewardingSystem.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;

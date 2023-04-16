@@ -1,12 +1,10 @@
-package cz.morosystem.RewardingSystem.entities;
+package cz.morosystem.RewardingSystem.entity;
 
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
 
 @Data
 @Entity

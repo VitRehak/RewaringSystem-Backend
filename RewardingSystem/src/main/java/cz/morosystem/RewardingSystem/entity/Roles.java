@@ -1,4 +1,4 @@
-package cz.morosystem.RewardingSystem.entities;
+package cz.morosystem.RewardingSystem.entity;
 
 public enum Roles {
     ROLE_ADMIN,
