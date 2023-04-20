@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 
 @Data
 public class PeriodOut {
+    private Long id;
     private boolean billed;
     private LocalDateTime startOfPeriod;
     private LocalDateTime endOfPeriod;

@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Table(name = "employee")
 public class Employee {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "employee_id")
@@ -20,6 +21,8 @@ public class Employee {
     private String firstName;
     @Column(name = "last_name", length = 50, nullable = false)
     private String lastName;
+    @Column(name = "sub")
+    private String sub;
 
     @Column(nullable = false)
     @ElementCollection(fetch = FetchType.EAGER)

@@ -10,5 +10,6 @@ import java.io.Serializable;
 
 @Data
 public class PeriodStateIn {
+    private Long employeeId;
     private int budget;
 }

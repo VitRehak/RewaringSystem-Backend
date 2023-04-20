@@ -1,7 +1,9 @@
 package cz.morosystem.RewardingSystem.model.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.io.Serializable;
 
@@ -9,20 +11,18 @@ import java.io.Serializable;
 @Entity
 @Table(name = "period_state")
 public class PeriodState {
-    @EmbeddedId
-    private PeriodStateId id;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "period_state_id")
+    private Long id;
 
     @Column(name = "budget")
     private int budget;
 
-    @Embeddable
-    @Data
-    public class PeriodStateId implements Serializable {
+    @Column(name = "employee_id")
+    private Long employeeId;
 
-        @Column(name = "employee_id")
-        private Long employeeId;
+    @Column(name = "period_id")
+    private Long periodId;
 
-        @Column(name = "period_id")
-        private Long periodId;
-    }
 }

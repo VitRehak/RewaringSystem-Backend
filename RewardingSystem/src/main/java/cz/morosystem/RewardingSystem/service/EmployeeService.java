@@ -7,6 +7,7 @@ import cz.morosystem.RewardingSystem.model.out.EmployeeOut;
 import cz.morosystem.RewardingSystem.repository.EmployeeRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.oauth2.core.user.OAuth2User;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -34,6 +35,24 @@ public class EmployeeService {
         Optional<Employee> dbEmployee = employeeRepository.findById(id);
         return dbEmployee.isPresent() ? dbEmployee.get() : null;
     }
+
+    public void loginEmployee(OAuth2User oAuth2User) {
+        Optional<Employee> dbEmployee = employeeRepository.findEmployeeBySub(oAuth2User.getAttribute("sub"));
+        if (dbEmployee.isEmpty())
+            registerEmployee(oAuth2User);
+
+    }
+
+    public void registerEmployee(OAuth2User oAuth2User) {
+        Employee employee = new Employee();
+        employee.setSub(oAuth2User.getAttribute("sub"));
+        employee.setEmail(oAuth2User.getAttribute("email"));
+        employee.setFirstName(oAuth2User.getAttribute("given_name"));
+        employee.setLastName(oAuth2User.getAttribute("family_name"));
+        employee.setRoles(List.of(Role.ROLE_USER));
+        employeeRepository.save(employee);
+    }
+
 
     public EmployeeOut createEmployee(EmployeeIn employeeIn) {
         Employee dbEmployee = modelMapper.map(employeeIn, Employee.class);
