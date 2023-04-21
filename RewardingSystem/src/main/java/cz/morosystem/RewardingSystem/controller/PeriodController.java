@@ -21,7 +21,7 @@ public class PeriodController {
     @GetMapping(path = "/currentPeriod", produces = "application/json")
     public ResponseEntity<PeriodOut> getCurrentPeriod() {
         PeriodOut periodOut = periodService.currentPeriodOut();
-        return periodOut == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(periodOut);
+        return periodOut == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(periodOut);
     }
 
     //CREATE PERIOD

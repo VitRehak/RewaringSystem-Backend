@@ -24,13 +24,13 @@ public class PermissionEvaluator {
     RewardService rewardService;
 
     public boolean adminRole(OAuth2AuthenticatedPrincipal principal) {
-        Employee employee = employeeService.getEmployeeBySub(principal.getAttribute("sub"));
+        Employee employee = employeeService.getEmployee((String) principal.getAttribute("sub"));
         boolean admin = employee.getRoles().contains(Role.ROLE_ADMIN);
         return admin;
     }
 
     public boolean groupOwner(OAuth2AuthenticatedPrincipal principal, Long id) {
-        Employee employee = employeeService.getEmployeeBySub(principal.getAttribute("sub"));
+        Employee employee = employeeService.getEmployee((String) principal.getAttribute("sub"));
         GroupOfEmployees groupOfEmployee = groupOfEmployeesService.getGroup(id);
         if (groupOfEmployee == null)
             return false;
@@ -39,7 +39,7 @@ public class PermissionEvaluator {
     }
 
     public boolean rewardSender(OAuth2AuthenticatedPrincipal principal, Long id) {
-        Employee employee = employeeService.getEmployeeBySub(principal.getAttribute("sub"));
+        Employee employee = employeeService.getEmployee((String) principal.getAttribute("sub"));
         Reward reward = rewardService.getReward(id);
         boolean sender = employee.equals(reward.getSender());
         return sender;

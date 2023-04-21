@@ -2,7 +2,6 @@ package cz.morosystem.RewardingSystem.service;
 
 import cz.morosystem.RewardingSystem.model.entity.Employee;
 import cz.morosystem.RewardingSystem.model.entity.GroupOfEmployees;
-import cz.morosystem.RewardingSystem.model.in.EmployeeIn;
 import cz.morosystem.RewardingSystem.model.in.GroupOfEmployeesIn;
 import cz.morosystem.RewardingSystem.model.out.EmployeeOut;
 import cz.morosystem.RewardingSystem.model.out.GroupOfEmployeesOut;
@@ -25,20 +24,16 @@ public class GroupOfEmployeesService {
     @Autowired
     GroupOfEmployeesRepository groupOfEmployeesRepository;
 
-//    public List<GroupOfEmployeesOut> getMyGroups(Long id) {
-//        List<GroupOfEmployees> dbGroupOfEmployees = groupOfEmployeesRepository.findAllGroupsOfEmployee(id);
-//        return dbGroupOfEmployees.stream().map(g -> modelMapper.map(g, GroupOfEmployeesOut.class)).toList();
-//    }
 
     public List<GroupOfEmployeesOut> getMyGroups(String sub) {
-        Employee employee = employeeService.getEmployeeBySub(sub);
+        Employee employee = employeeService.getEmployee(sub);
         List<GroupOfEmployees> dbGroupOfEmployees = groupOfEmployeesRepository.findAllGroupsOfEmployee(employee.getId());
         return dbGroupOfEmployees.stream().map(g -> modelMapper.map(g, GroupOfEmployeesOut.class)).toList();
     }
 
     public GroupOfEmployeesOut create(GroupOfEmployeesIn groupOfEmployeesIn, String sub) {
         GroupOfEmployees groupOfEmployees = modelMapper.map(groupOfEmployeesIn, GroupOfEmployees.class);
-        Employee creator = employeeService.getEmployeeBySub(sub);
+        Employee creator = employeeService.getEmployee(sub);
         groupOfEmployees.setCreator(creator);
         return modelMapper.map(groupOfEmployeesRepository.save(groupOfEmployees), GroupOfEmployeesOut.class);
     }
@@ -56,11 +51,10 @@ public class GroupOfEmployeesService {
             return modelMapper.map(groupOfEmployeesRepository.save(groupOfEmployees), GroupOfEmployeesOut.class);
         }
         return null;
-
     }
 
-    public GroupOfEmployeesOut modifierMembers(List<Long> groupOfEmployeesIn, Long id, String sub) { //////////////
-        Employee employee = employeeService.getEmployeeBySub(sub);
+    public GroupOfEmployeesOut modifierMembers(List<Long> groupOfEmployeesIn, Long id, String sub) {
+        Employee employee = employeeService.getEmployee(sub);
         Optional<GroupOfEmployees> dbGroupOfEmployees = groupOfEmployeesRepository.findById(id);
         if (dbGroupOfEmployees.isPresent()) {
             GroupOfEmployees groupOfEmployees = dbGroupOfEmployees.get();

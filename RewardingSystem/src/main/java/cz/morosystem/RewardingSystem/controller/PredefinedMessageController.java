@@ -30,7 +30,7 @@ public class PredefinedMessageController {
     @GetMapping(path = "/{id}")
     public ResponseEntity<PredefinedMessageOut> getPredefinedMessage(@PathVariable Long id) {
         PredefinedMessageOut predefinedMessageOut = predefinedMessageService.getPredefinedMessage(id);
-        return predefinedMessageOut ==   null ? ResponseEntity.notFound().build() : ResponseEntity.ok(predefinedMessageOut);
+        return predefinedMessageOut ==  null ? ResponseEntity.notFound().build() : ResponseEntity.ok(predefinedMessageOut);
     }
 
     //CREATE

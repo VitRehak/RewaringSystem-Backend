@@ -49,7 +49,8 @@ public class GroupOfEmployeesController {
     @Transactional
     @PreAuthorize("@permissionEvaluator.groupOwner(principal, #id)")
     public ResponseEntity<GroupOfEmployeesOut> updateGroup(@RequestBody GroupOfEmployeesIn groupOfEmployeesIn, @PathVariable Long id) {
-        return ResponseEntity.ok(groupOfEmployeesService.updateGroup(groupOfEmployeesIn, id));
+        GroupOfEmployeesOut groupOfEmployeesOut = groupOfEmployeesService.updateGroup(groupOfEmployeesIn, id);
+        return groupOfEmployeesOut == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(groupOfEmployeesOut);
     }
 
     //CHANGE MEMBERS

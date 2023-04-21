@@ -31,43 +31,43 @@ public class EmployeeService {
         return dbEmployee.isPresent() ? modelMapper.map(dbEmployee, EmployeeOut.class) : null;
     }
 
+    public EmployeeOut getOutEmployee(String sub) {
+        Optional<Employee> dbEmployee = employeeRepository.findEmployeeBySub(sub);
+        return dbEmployee.isPresent() ? modelMapper.map(dbEmployee, EmployeeOut.class) : null;
+    }
+
     public Employee getEmployee(Long id) {
         Optional<Employee> dbEmployee = employeeRepository.findById(id);
         return dbEmployee.isPresent() ? dbEmployee.get() : null;
     }
 
-    public void loginEmployee(OAuth2AuthenticatedPrincipal oAuth2User) {
-        Optional<Employee> dbEmployee = employeeRepository.findEmployeeBySub(oAuth2User.getAttribute("sub"));
-        if (dbEmployee.isEmpty())
-            registerEmployee(oAuth2User);
+    public Employee getEmployee(String sub) {
+        Optional<Employee> dbEmployee = employeeRepository.findEmployeeBySub(sub);
+        return dbEmployee.isPresent() ? dbEmployee.get() : null;
     }
 
-    public Employee getEmployeeBySub(String sub) {
-        Optional<Employee> dbEmployee = employeeRepository.findEmployeeBySub(sub);
-        if (dbEmployee.isPresent())
-            return dbEmployee.get();
+    public EmployeeOut modifierRoles(Long id, List<Role> roles) {
+        Optional<Employee> dbEmployee = employeeRepository.findById(id);
+        if (dbEmployee.isPresent()) {
+            Employee employee = dbEmployee.get();
+            employee.setRoles(roles);
+            return modelMapper.map(employeeRepository.save(employee), EmployeeOut.class);
+        }
         return null;
     }
 
-    public void registerEmployee(OAuth2AuthenticatedPrincipal oAuth2User) {
-        Employee employee = new Employee();
-        employee.setSub(oAuth2User.getAttribute("sub"));
-        employee.setEmail(oAuth2User.getAttribute("email"));
-        employee.setFirstName(oAuth2User.getAttribute("given_name"));
-        employee.setLastName(oAuth2User.getAttribute("family_name"));
-        employee.setRoles(List.of(Role.ROLE_USER));
-        employeeRepository.save(employee);
+    public List<Role> getMyRoles(String sub) {
+        Employee employee = getEmployee(sub);
+        return employee == null ? new ArrayList<>() : employee.getRoles();
     }
-
 
     public EmployeeOut createEmployee(EmployeeIn employeeIn) {
         Employee dbEmployee = modelMapper.map(employeeIn, Employee.class);
         dbEmployee.setRoles(List.of(Role.ROLE_USER));
-        dbEmployee = employeeRepository.save(dbEmployee);
-        return modelMapper.map(dbEmployee, EmployeeOut.class);
+        return modelMapper.map(employeeRepository.save(dbEmployee), EmployeeOut.class);
     }
 
-    public EmployeeOut updateEmployee(Long id, Employee employeeIn) {
+    public EmployeeOut updateEmployee(Long id, EmployeeIn employeeIn) {
         Optional<Employee> dbEmployee = employeeRepository.findById(id);
         if (dbEmployee.isPresent()) {
             Employee employee = dbEmployee.get();
@@ -82,21 +82,36 @@ public class EmployeeService {
         employeeRepository.deleteById(id);
     }
 
-    public EmployeeOut modifierRoles(Long id, List<Role> roles) {
-        Optional<Employee> dbEmployee = employeeRepository.findById(id);
-        if (dbEmployee.isPresent()) {
+    public void loginEmployee(OAuth2AuthenticatedPrincipal oAuth2User) {
+        Optional<Employee> dbEmployee = employeeRepository.findEmployeeBySub(oAuth2User.getAttribute("sub"));
+        if (dbEmployee.isEmpty()) {
+            registerEmployee(oAuth2User);
+        } else {
             Employee employee = dbEmployee.get();
-            employee.setRoles(roles);
-            return modelMapper.map(employeeRepository.save(employee), EmployeeOut.class);
+            employee.setEmail(oAuth2User.getAttribute("email"));
+            employee.setFirstName(oAuth2User.getAttribute("given_name"));
+            employee.setLastName(oAuth2User.getAttribute("family_name"));
+            employeeRepository.save(employee);
         }
-        return null;
+    }
+
+    public void registerEmployee(OAuth2AuthenticatedPrincipal oAuth2User) {
+        Employee employee = new Employee();
+        employee.setSub(oAuth2User.getAttribute("sub"));
+        employee.setEmail(oAuth2User.getAttribute("email"));
+        employee.setFirstName(oAuth2User.getAttribute("given_name"));
+        employee.setLastName(oAuth2User.getAttribute("family_name"));
+        employee.setRoles(List.of(Role.ROLE_USER));
+        employeeRepository.save(employee);
     }
 
     public List<Employee> getListOfEmployees(List<Long> inEmployees) {
         List<Employee> outEmployees = new ArrayList<>();
         inEmployees.forEach(e -> {
             Optional<Employee> employee = employeeRepository.findById(e);
-            employee.ifPresent(outEmployees::add);
+            if (employee.isPresent()){
+                outEmployees.add(employee.get());
+            }
         });
         return outEmployees;
     }

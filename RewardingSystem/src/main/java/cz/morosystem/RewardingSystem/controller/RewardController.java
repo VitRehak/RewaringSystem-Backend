@@ -38,7 +38,8 @@ public class RewardController {
     @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     @Transactional
     public ResponseEntity<RewardOut> create(@RequestBody RewardIn rewardIn, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
-        return ResponseEntity.ok(rewardService.createReward(rewardIn, principal.getAttribute("sub")));
+        RewardOut rewardOut = rewardService.createReward(rewardIn, principal.getAttribute("sub"));
+        return rewardOut == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(rewardOut);
     }
 
     @PutMapping(path = "/update/{id}", consumes = "application/json", produces = "application/json")

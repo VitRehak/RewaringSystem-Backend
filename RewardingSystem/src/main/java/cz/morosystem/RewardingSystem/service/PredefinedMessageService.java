@@ -25,6 +25,11 @@ public class PredefinedMessageService {
         return dbPredefinedMessages.stream().map(m -> modelMapper.map(m, PredefinedMessageOut.class)).toList();
     }
 
+    public PredefinedMessageOut getPredefinedMessage(Long id) {
+        Optional<PredefinedMessage> dbPredefinedMessage = predefinedMessageRepository.findById(id);
+        return dbPredefinedMessage.isPresent() ? modelMapper.map(dbPredefinedMessage, PredefinedMessageOut.class) : null;
+    }
+
     public PredefinedMessageOut addPredefinedMessage(PredefinedMessageIn predefinedMessageIn) {
         PredefinedMessage predefinedMessage = predefinedMessageRepository.save(modelMapper.map(predefinedMessageIn, PredefinedMessage.class));
         return modelMapper.map(predefinedMessage, PredefinedMessageOut.class);
@@ -32,12 +37,5 @@ public class PredefinedMessageService {
 
     public void deletePredefinedMessage(Long id) {
         predefinedMessageRepository.deleteById(id);
-    }
-
-    public PredefinedMessageOut getPredefinedMessage(Long id) {
-        Optional<PredefinedMessage> dbPredefinedMessage = predefinedMessageRepository.findById(id);
-
-
-        return dbPredefinedMessage.isPresent() ? modelMapper.map(dbPredefinedMessage, PredefinedMessageOut.class) : null;
     }
 }

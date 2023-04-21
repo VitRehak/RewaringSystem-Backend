@@ -9,7 +9,8 @@ import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
-import org.springframework.security.oauth2.core.user.OAuth2User;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -34,13 +35,20 @@ public class EmployeeController {
         return outEmployee == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(outEmployee);
     }
 
+    //ROLES
+    @GetMapping(path = "/myRoles", produces = "application/json")
+    public ResponseEntity<List<Role>> getMyRoles(@AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
+        List<Role> roles = employeeService.getMyRoles(principal.getAttribute("sub"));
+        return ResponseEntity.ok(roles);
+    }
+
     //ROLE CHANGE
     @PostMapping(path = "/modifierRoles/{id}", consumes = "application/json", produces = "application/json")
     @Transactional
     @PreAuthorize("@permissionEvaluator.adminRole(principal)")
     public ResponseEntity<EmployeeOut> modifierRoles(@PathVariable Long id, @RequestBody List<Role> roles) {
         EmployeeOut employeeOut = employeeService.modifierRoles(id, roles);
-        return employeeOut == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(employeeOut);
+        return employeeOut == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(employeeOut);
     }
 
     //////////////////////////////NOT NEEDED NOW////////////////////////////////////////
@@ -51,16 +59,16 @@ public class EmployeeController {
     @PreAuthorize("@permissionEvaluator.adminRole(principal)")
     public ResponseEntity<EmployeeOut> createEmployee(@RequestBody EmployeeIn employeeIn) {
         EmployeeOut employeeOut = employeeService.createEmployee(employeeIn);
-        return ResponseEntity.ok(employeeOut);
+        return employeeOut == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(employeeOut);
     }
-    //UPDATE
 
+    //UPDATE
     @PutMapping(path = "/update/{id}", consumes = "application/json", produces = "application/json")
     @Transactional
     @PreAuthorize("@permissionEvaluator.adminRole(principal)")
-    public ResponseEntity<EmployeeOut> updateEmployee(@PathVariable Long id, @RequestBody Employee employeeIn) {
+    public ResponseEntity<EmployeeOut> updateEmployee(@PathVariable Long id, @RequestBody EmployeeIn employeeIn) {
         EmployeeOut employeeOut = employeeService.updateEmployee(id, employeeIn);
-        return employeeOut == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(employeeOut);
+        return employeeOut == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(employeeOut);
     }
 
     //DELETE
