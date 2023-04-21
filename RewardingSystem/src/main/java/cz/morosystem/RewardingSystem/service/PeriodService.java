@@ -22,11 +22,13 @@ public class PeriodService {
     ModelMapper modelMapper;
 
     public Period currentPeriod() {
-        return periodRepository.currentPeriod();
+        Optional<Period> dbPeriod = periodRepository.currentPeriod();
+        return dbPeriod.isPresent() ? dbPeriod.get() : null;
     }
 
     public PeriodOut currentPeriodOut() {
-        return modelMapper.map(periodRepository.currentPeriod(),PeriodOut.class);
+        Optional<Period> dbPeriod = periodRepository.currentPeriod();
+        return dbPeriod.isPresent() ? modelMapper.map(dbPeriod, PeriodOut.class) : null;
     }
 
     public PeriodOut create(PeriodIn inPeriod) {
@@ -41,10 +43,10 @@ public class PeriodService {
 
     public PeriodOut billed(Long id) {
         Optional<Period> dbPeriod = periodRepository.findById(id);
-        if(dbPeriod.isPresent()){
+        if (dbPeriod.isPresent()) {
             Period period = dbPeriod.get();
             period.setBilled(true);
-            return modelMapper.map(periodRepository.save(period),PeriodOut.class);
+            return modelMapper.map(periodRepository.save(period), PeriodOut.class);
         }
         return null;
     }

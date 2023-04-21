@@ -10,7 +10,6 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
@@ -32,18 +31,24 @@ public class RewardService {
         return dbReward.stream().map(r -> modelMapper.map(r, RewardOut.class)).toList();
     }
 
-    public RewardOut getReward(Long id) {
+    public RewardOut getRewardOut(Long id) {
         Optional<Reward> dbReward = rewardRepository.findById(id);
         return dbReward.isPresent() ? modelMapper.map(dbReward.get(), RewardOut.class) : null;
     }
 
-    public List<RewardOut> getAllMyRewards(Long id) {
-        List<Reward> dbRewards = rewardRepository.findAllSendersRewards(id);
+    public Reward getReward(Long id) {
+        Optional<Reward> dbReward = rewardRepository.findById(id);
+        return dbReward.isPresent() ? dbReward.get() : null;
+    }
+
+    public List<RewardOut> getAllMyRewards(String sub) {
+        Employee employee = employeeService.getEmployeeBySub(sub);
+        List<Reward> dbRewards = rewardRepository.findAllSendersRewards(employee.getId());
         return dbRewards.stream().map(r -> modelMapper.map(r, RewardOut.class)).toList();
     }
 
-    public RewardOut createReward(RewardIn rewardIn, Long id) {
-        Employee sender = employeeService.getEmployee(id);
+    public RewardOut createReward(RewardIn rewardIn, String sub) {
+        Employee sender = employeeService.getEmployeeBySub(sub);
         Employee receiver = employeeService.getEmployee(rewardIn.getReceiver());
         Reward reward = new Reward();
         reward.setReceiver(receiver);
@@ -56,10 +61,10 @@ public class RewardService {
         return modelMapper.map(rewardRepository.save(reward), RewardOut.class);
     }
 
-    public RewardOut update(RewardIn rewardIn, Long id){
+    public RewardOut update(RewardIn rewardIn, Long id) {
         Employee receiver = employeeService.getEmployee(rewardIn.getReceiver());
         Optional<Reward> dbReward = rewardRepository.findById(id);
-        if(dbReward.isPresent()){
+        if (dbReward.isPresent()) {
             Reward reward = dbReward.get();
             reward.setReceiver(receiver);
             reward.setAmountOfMoney(rewardIn.getAmountOfMoney());

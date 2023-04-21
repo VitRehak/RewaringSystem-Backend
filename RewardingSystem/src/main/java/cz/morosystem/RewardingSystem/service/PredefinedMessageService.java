@@ -9,6 +9,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 public class PredefinedMessageService {
@@ -31,5 +32,12 @@ public class PredefinedMessageService {
 
     public void deletePredefinedMessage(Long id) {
         predefinedMessageRepository.deleteById(id);
+    }
+
+    public PredefinedMessageOut getPredefinedMessage(Long id) {
+        Optional<PredefinedMessage> dbPredefinedMessage = predefinedMessageRepository.findById(id);
+
+
+        return dbPredefinedMessage.isPresent() ? modelMapper.map(dbPredefinedMessage, PredefinedMessageOut.class) : null;
     }
 }
