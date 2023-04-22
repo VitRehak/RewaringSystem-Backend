@@ -68,7 +68,7 @@ public class GroupOfEmployeesController {
 
     @GetMapping(path = "/groupMembers/{id}", produces = "application/json")
     public ResponseEntity<List<EmployeeOut>> groupMembers(@PathVariable Long id) {
-        List<EmployeeOut> employeeOuts = groupOfEmployeesService.getGroupMembers(id);
+        List<EmployeeOut> employeeOuts = groupOfEmployeesService.getGroupMembersOut(id);
         return employeeOuts == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(employeeOuts);
     }
 }

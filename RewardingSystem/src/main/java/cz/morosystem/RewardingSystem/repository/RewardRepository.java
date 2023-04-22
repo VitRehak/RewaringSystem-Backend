@@ -10,8 +10,10 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface RewardRepository extends JpaRepository<Reward,Long> {
-    //@Query(value = "SELECT * FROM reward WHERE sender = ?1", nativeQuery = true)
+public interface RewardRepository extends JpaRepository<Reward, Long> {
     @Query(value = "SELECT r FROM Reward r WHERE r.sender.id = :id")
     List<Reward> findAllSendersRewards(@Param("id") Long id);
+
+    @Query(value = "SELECT r FROM Reward r WHERE r.sender.id = :sender_id AND r.receiver.id = :receiver_id")
+    List<Reward> findAllSendersAndReceiversRewards(@Param("sender_id") Long senderId, @Param("receiver_id") Long receiverId);
 }

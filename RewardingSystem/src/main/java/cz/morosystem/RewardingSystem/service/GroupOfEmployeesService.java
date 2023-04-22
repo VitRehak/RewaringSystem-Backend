@@ -67,21 +67,22 @@ public class GroupOfEmployeesService {
         return null;
     }
 
-    public List<EmployeeOut> getGroupMembers(Long id) {
+    public List<Employee> getGroupMembers(Long id) {
         Optional<GroupOfEmployees> dbGroupOfEmployees = groupOfEmployeesRepository.findById(id);
         if (dbGroupOfEmployees.isPresent()) {
             GroupOfEmployees groupOfEmployees = dbGroupOfEmployees.get();
-            List<Employee> employees = groupOfEmployees.getMembers();
-            return employees.stream().map(e -> modelMapper.map(e, EmployeeOut.class)).toList();
+            return groupOfEmployees.getMembers();
         }
         return null;
+    }
+
+    public List<EmployeeOut> getGroupMembersOut(Long id) {
+        return getGroupMembers(id).stream().map(e -> modelMapper.map(e, EmployeeOut.class)).toList();
     }
 
     public GroupOfEmployees getGroup(Long id) {
         Optional<GroupOfEmployees> dbGroupOfEmployee = groupOfEmployeesRepository.findById(id);
         return dbGroupOfEmployee.isPresent() ? dbGroupOfEmployee.get() : null;
 
-
     }
-
 }

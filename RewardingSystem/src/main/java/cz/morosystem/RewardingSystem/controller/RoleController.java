@@ -17,6 +17,7 @@ public class RoleController {
     @Autowired
     RoleService roleService;
 
+    //ALL
     @GetMapping(path = "/all", produces = "application/json")
     public List<Role> roles() {
         return roleService.getAllRoles();
