@@ -1,6 +1,7 @@
 package cz.morosystem.RewardingSystem.service;
 
 import cz.morosystem.RewardingSystem.model.entity.Employee;
+import cz.morosystem.RewardingSystem.model.entity.Period;
 import cz.morosystem.RewardingSystem.model.entity.PeriodState;
 import cz.morosystem.RewardingSystem.model.in.PeriodStateIn;
 import cz.morosystem.RewardingSystem.model.out.PeriodStateOut;
@@ -18,7 +19,6 @@ public class PeriodStateService {
 
     @Autowired
     PeriodStateRepository periodStateRepository;
-
     @Autowired
     EmployeeService employeeService;
     @Autowired
@@ -26,13 +26,14 @@ public class PeriodStateService {
     @Autowired
     ModelMapper modelMapper;
 
-    public List<PeriodStateOut> assignBudget(List<PeriodStateIn> periodStateIn, Long id) {
+    public List<PeriodStateOut> assignBudget(List<PeriodStateIn> periodStateIn) {
+        Period period = periodService.currentPeriod();
         List<PeriodStateOut> periodStateOut = new ArrayList<>();
         periodStateIn.forEach(record -> {
             PeriodState periodState = new PeriodState();
             periodState.setBudget(record.getBudget());
             periodState.setEmployeeId(record.getEmployeeId());
-            periodState.setPeriodId(id);
+            periodState.setPeriodId(period.getId());
             periodStateOut.add(modelMapper.map(periodStateRepository.save(periodState), PeriodStateOut.class));
         });
         return periodStateOut;

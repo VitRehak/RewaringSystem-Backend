@@ -23,11 +23,11 @@ public class PeriodStateController {
     PeriodStateService periodStateService;
 
     //ASSIGN BUDGET
-    @PostMapping(path = "/assignBudget/{id}", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/assignBudget", consumes = "application/json", produces = "application/json")
     @Transactional
     @PreAuthorize("@permissionEvaluator.adminRole(principal)")
-    public ResponseEntity<List<PeriodStateOut>> assignBudget(@RequestBody List<PeriodStateIn> periodStateIn, @PathVariable Long id){
-        return ResponseEntity.ok(periodStateService.assignBudget(periodStateIn,id));
+    public ResponseEntity<List<PeriodStateOut>> assignBudget(@RequestBody List<PeriodStateIn> periodStateIn){
+        return ResponseEntity.ok(periodStateService.assignBudget(periodStateIn));
     }
 
     //MY BUDGET

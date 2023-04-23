@@ -11,7 +11,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping(path = "period")
+@RequestMapping(path = "/period")
 public class PeriodController {
 
     @Autowired

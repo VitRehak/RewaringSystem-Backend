@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping(path = "/GroupOfEmployees")
+@RequestMapping(path = "/groupOfEmployees")
 public class GroupOfEmployeesController {
 
     @Autowired
