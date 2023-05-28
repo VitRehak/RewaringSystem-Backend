@@ -29,7 +29,7 @@ public class GroupOfEmployeesController {
     }
 
     //CREATE
-    @PostMapping(path = "/Create", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     @Transactional
     public ResponseEntity<GroupOfEmployeesOut> createGroup(@RequestBody GroupOfEmployeesIn groupOfEmployeesIn, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
         return ResponseEntity.ok(groupOfEmployeesService.create(groupOfEmployeesIn, principal.getAttribute("sub")));
