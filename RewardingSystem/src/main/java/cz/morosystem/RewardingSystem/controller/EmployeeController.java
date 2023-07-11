@@ -1,12 +1,10 @@
 package cz.morosystem.RewardingSystem.controller;
 
-import cz.morosystem.RewardingSystem.model.entity.Employee;
 import cz.morosystem.RewardingSystem.model.entity.Role;
 import cz.morosystem.RewardingSystem.model.in.EmployeeIn;
 import cz.morosystem.RewardingSystem.model.out.EmployeeOut;
 import cz.morosystem.RewardingSystem.service.EmployeeService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -19,8 +17,11 @@ import java.util.List;
 @RequestMapping(path = "/employee")
 public class EmployeeController {
 
-    @Autowired
-    private EmployeeService employeeService;
+    private final EmployeeService employeeService;
+
+    public EmployeeController(EmployeeService employeeService) {
+        this.employeeService = employeeService;
+    }
 
     //ALL
     @GetMapping(path = "/all", produces = "application/json")
@@ -53,14 +54,14 @@ public class EmployeeController {
 
     //////////////////////////////NOT NEEDED NOW////////////////////////////////////////
 
-    //CREATE
-    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
-    @Transactional
-    @PreAuthorize("@permissionEvaluator.adminRole(principal)")
-    public ResponseEntity<EmployeeOut> createEmployee(@RequestBody EmployeeIn employeeIn) {
-        EmployeeOut employeeOut = employeeService.createEmployee(employeeIn);
-        return employeeOut == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(employeeOut);
-    }
+//    //CREATE
+//    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
+//    @Transactional
+//    @PreAuthorize("@permissionEvaluator.adminRole(principal)")
+//    public ResponseEntity<EmployeeOut> createEmployee(@RequestBody EmployeeIn employeeIn) {
+//        EmployeeOut employeeOut = employeeService.createEmployee(employeeIn);
+//        return employeeOut == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(employeeOut);
+//    }
 
     //UPDATE
     @PutMapping(path = "/update/{id}", consumes = "application/json", produces = "application/json")

@@ -4,8 +4,6 @@ import cz.morosystem.RewardingSystem.model.in.PeriodIn;
 import cz.morosystem.RewardingSystem.model.out.PeriodOut;
 import cz.morosystem.RewardingSystem.service.PeriodService;
 import jakarta.transaction.Transactional;
-import org.modelmapper.internal.bytebuddy.implementation.bind.annotation.Pipe;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
@@ -14,8 +12,12 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(path = "/period")
 public class PeriodController {
 
-    @Autowired
+    final
     PeriodService periodService;
+
+    public PeriodController(PeriodService periodService) {
+        this.periodService = periodService;
+    }
 
     //CURRENT PERIOD
     @GetMapping(path = "/currentPeriod", produces = "application/json")

@@ -6,7 +6,6 @@ import cz.morosystem.RewardingSystem.model.in.EmployeeIn;
 import cz.morosystem.RewardingSystem.model.out.EmployeeOut;
 import cz.morosystem.RewardingSystem.repository.EmployeeRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
 import org.springframework.stereotype.Service;
 
@@ -16,10 +15,15 @@ import java.util.Optional;
 
 @Service
 public class EmployeeService {
-    @Autowired
+    final
     EmployeeRepository employeeRepository;
-    @Autowired
+    final
     ModelMapper modelMapper;
+
+    public EmployeeService(EmployeeRepository employeeRepository, ModelMapper modelMapper) {
+        this.employeeRepository = employeeRepository;
+        this.modelMapper = modelMapper;
+    }
 
     public List<EmployeeOut> getAllEmployees() {
         List<Employee> dbEmployees = employeeRepository.findAll();
@@ -31,19 +35,20 @@ public class EmployeeService {
         return dbEmployee.isPresent() ? modelMapper.map(dbEmployee, EmployeeOut.class) : null;
     }
 
-    public EmployeeOut getOutEmployee(String sub) {
-        Optional<Employee> dbEmployee = employeeRepository.findEmployeeBySub(sub);
-        return dbEmployee.isPresent() ? modelMapper.map(dbEmployee, EmployeeOut.class) : null;
-    }
+    //NOT NEEDED
+//    public EmployeeOut getOutEmployee(String sub) {
+//        Optional<Employee> dbEmployee = employeeRepository.findEmployeeBySub(sub);
+//        return dbEmployee.isPresent() ? modelMapper.map(dbEmployee, EmployeeOut.class) : null;
+//    }
 
     public Employee getEmployee(Long id) {
         Optional<Employee> dbEmployee = employeeRepository.findById(id);
-        return dbEmployee.isPresent() ? dbEmployee.get() : null;
+        return dbEmployee.orElse(null);
     }
 
     public Employee getEmployee(String sub) {
         Optional<Employee> dbEmployee = employeeRepository.findEmployeeBySub(sub);
-        return dbEmployee.isPresent() ? dbEmployee.get() : null;
+        return dbEmployee.orElse(null);
     }
 
     public EmployeeOut modifierRoles(Long id, List<Role> roles) {
@@ -61,11 +66,12 @@ public class EmployeeService {
         return employee == null ? new ArrayList<>() : employee.getRoles();
     }
 
-    public EmployeeOut createEmployee(EmployeeIn employeeIn) {
-        Employee dbEmployee = modelMapper.map(employeeIn, Employee.class);
-        dbEmployee.setRoles(List.of(Role.ROLE_USER));
-        return modelMapper.map(employeeRepository.save(dbEmployee), EmployeeOut.class);
-    }
+    //NOT NEEDED
+//    public EmployeeOut createEmployee(EmployeeIn employeeIn) {
+//        Employee dbEmployee = modelMapper.map(employeeIn, Employee.class);
+//        dbEmployee.setRoles(List.of(Role.ROLE_USER));
+//        return modelMapper.map(employeeRepository.save(dbEmployee), EmployeeOut.class);
+//    }
 
     public EmployeeOut updateEmployee(Long id, EmployeeIn employeeIn) {
         Optional<Employee> dbEmployee = employeeRepository.findById(id);
@@ -109,9 +115,7 @@ public class EmployeeService {
         List<Employee> outEmployees = new ArrayList<>();
         inEmployees.forEach(e -> {
             Optional<Employee> employee = employeeRepository.findById(e);
-            if (employee.isPresent()){
-                outEmployees.add(employee.get());
-            }
+            employee.ifPresent(outEmployees::add);
         });
         return outEmployees;
     }

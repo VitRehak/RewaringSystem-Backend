@@ -19,14 +19,32 @@ public class Reward {
 
     @Column(name = "text", length = 1000)
     private String text;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "sender", nullable = false)
     private Employee sender;
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "receiver", nullable = false)
-    private Employee receiver;
 
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "period_id")
     private Period period;
+
+    //OLD
+//    @ManyToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "receiver", nullable = false)
+//    private GroupOfEmployees receiver;
+
+
+    //NEW
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "receiver_group")
+    private GroupOfEmployees receiverGroup;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "receiver_employee")
+    private Employee receiverEmployee;
+
+
+
+
+
 }

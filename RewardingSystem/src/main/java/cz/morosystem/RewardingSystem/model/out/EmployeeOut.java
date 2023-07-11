@@ -13,5 +13,5 @@ public class EmployeeOut {
     private String email;
     private String firstName;
     private String lastName;
-//    private List<Role> roles = new ArrayList<>();
+    private List<Role> roles = new ArrayList<>();
 }

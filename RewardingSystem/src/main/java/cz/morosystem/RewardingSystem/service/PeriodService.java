@@ -5,25 +5,27 @@ import cz.morosystem.RewardingSystem.model.in.PeriodIn;
 import cz.morosystem.RewardingSystem.model.out.PeriodOut;
 import cz.morosystem.RewardingSystem.repository.PeriodRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.time.Month;
 import java.util.Optional;
 
 @Service
 public class PeriodService {
 
-    @Autowired
+    final
     PeriodRepository periodRepository;
 
-    @Autowired
+    final
     ModelMapper modelMapper;
+
+    public PeriodService(PeriodRepository periodRepository, ModelMapper modelMapper) {
+        this.periodRepository = periodRepository;
+        this.modelMapper = modelMapper;
+    }
 
     public Period currentPeriod() {
         Optional<Period> dbPeriod = periodRepository.currentPeriod();
-        return dbPeriod.isPresent() ? dbPeriod.get() : null;
+        return dbPeriod.orElse(null);
     }
 
     public PeriodOut currentPeriodOut() {

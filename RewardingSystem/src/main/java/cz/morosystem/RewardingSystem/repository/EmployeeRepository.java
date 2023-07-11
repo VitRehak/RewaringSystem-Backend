@@ -12,5 +12,5 @@ import java.util.Optional;
 public interface EmployeeRepository extends JpaRepository<Employee, Long> {
 
     @Query(value =  "SELECT * FROM employee WHERE sub = :sub",nativeQuery = true)
-    public Optional<Employee> findEmployeeBySub(@Param("sub") String sub);
+    Optional<Employee> findEmployeeBySub(@Param("sub") String sub);
 }

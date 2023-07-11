@@ -1,11 +1,9 @@
 package cz.morosystem.RewardingSystem.controller;
 
-import cz.morosystem.RewardingSystem.model.in.RewardForGroup;
 import cz.morosystem.RewardingSystem.model.in.RewardIn;
 import cz.morosystem.RewardingSystem.model.out.RewardOut;
 import cz.morosystem.RewardingSystem.service.RewardService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.security.oauth2.core.OAuth2AuthenticatedPrincipal;
@@ -17,8 +15,12 @@ import java.util.List;
 @RequestMapping(path = "/reward")
 public class RewardController {
 
-    @Autowired
+    final
     RewardService rewardService;
+
+    public RewardController(RewardService rewardService) {
+        this.rewardService = rewardService;
+    }
 
     //ALL
     @GetMapping(path = "/all")
@@ -40,20 +42,30 @@ public class RewardController {
     }
 
     //SEND
-    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/send", consumes = "application/json", produces = "application/json")
     @Transactional
     public ResponseEntity<RewardOut> create(@RequestBody RewardIn rewardIn, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
         RewardOut rewardOut = rewardService.createReward(rewardIn, principal.getAttribute("sub"));
         return rewardOut == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(rewardOut);
     }
 
-    //SEND MULTIPLE
-    @PostMapping(path = "/createMultiple", consumes = "application/json", produces = "application/json")
-    @Transactional
-    public ResponseEntity<List<RewardOut>> createMultiple(@RequestBody RewardForGroup rewardForGroup, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
-        List<RewardOut> rewardOuts = rewardService.createMultipleRewards(rewardForGroup, principal.getAttribute("sub"));
-        return ResponseEntity.ok(rewardOuts);
-    }
+
+    // OLD
+//    //SEND TO EMPLOYEE
+//    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
+//    @Transactional
+//    public ResponseEntity<RewardOut> create(@RequestBody RewardIn rewardIn, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
+//        RewardOut rewardOut = rewardService.createReward(rewardIn, principal.getAttribute("sub"));
+//        return rewardOut == null ? ResponseEntity.badRequest().build() : ResponseEntity.ok(rewardOut);
+//    }
+//
+//    //SEND TO GROUP
+//    @PostMapping(path = "/createMultiple", consumes = "application/json", produces = "application/json")
+//    @Transactional
+//    public ResponseEntity<List<RewardOut>> createMultiple(@RequestBody RewardForGroup rewardForGroup, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
+//        List<RewardOut> rewardOuts = rewardService.createMultipleRewards(rewardForGroup, principal.getAttribute("sub"));
+//        return ResponseEntity.ok(rewardOuts);
+//    }
 
 
     //UPDATE
@@ -72,11 +84,11 @@ public class RewardController {
         return deleted ? ResponseEntity.noContent().build() : ResponseEntity.notFound().build();
     }
 
-    //DELETE MULTIPLE
-    @DeleteMapping(path = "/deleteMultiple/{id}")
-    @Transactional
-    public ResponseEntity<RewardOut> deleteMultiple(@PathVariable Long id, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
-        rewardService.deleteMultipleRewards(id, principal.getAttribute("sub"));
-        return ResponseEntity.noContent().build();
-    }
+//    //DELETE MULTIPLE
+//    @DeleteMapping(path = "/deleteMultiple/{id}")
+//    @Transactional
+//    public ResponseEntity<RewardOut> deleteMultiple(@PathVariable Long id, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
+//        rewardService.deleteMultipleRewards(id, principal.getAttribute("sub"));
+//        return ResponseEntity.noContent().build();
+//    }
 }

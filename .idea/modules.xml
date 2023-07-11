@@ -2,7 +2,6 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/RewardingSystem/RewardingSystem.iml" filepath="$PROJECT_DIR$/RewardingSystem/RewardingSystem.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/RewaringSystem-Backend.iml" filepath="$PROJECT_DIR$/.idea/RewaringSystem-Backend.iml" />
     </modules>
   </component>

@@ -14,5 +14,6 @@ public class RewardOut {
     private String text;
     private Employee sender;
     private Employee receiver;
+    private Boolean isGroup;
     private Period period;
 }
