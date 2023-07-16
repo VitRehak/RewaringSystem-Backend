@@ -22,11 +22,12 @@ public class RewardController {
         this.rewardService = rewardService;
     }
 
-    //ALL
-    @GetMapping(path = "/all")
-    public ResponseEntity<List<RewardOut>> getAll() {
-        return ResponseEntity.ok(rewardService.getAllRewards());
-    }
+//    //NOT NEEDED
+//    //ALL
+//    @GetMapping(path = "/all")
+//    public ResponseEntity<List<RewardOut>> getAll() {
+//        return ResponseEntity.ok(rewardService.getAllRewards());
+//    }
 
     //DETAIL
     @GetMapping(path = "/{id}")
@@ -42,7 +43,7 @@ public class RewardController {
     }
 
     //SEND
-    @PostMapping(path = "/send", consumes = "application/json", produces = "application/json")
+    @PostMapping(path = "/create", consumes = "application/json", produces = "application/json")
     @Transactional
     public ResponseEntity<RewardOut> create(@RequestBody RewardIn rewardIn, @AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal) {
         RewardOut rewardOut = rewardService.createReward(rewardIn, principal.getAttribute("sub"));
@@ -71,8 +72,8 @@ public class RewardController {
     //UPDATE
     @PutMapping(path = "/update/{id}", consumes = "application/json", produces = "application/json")
     @Transactional
-    public ResponseEntity<RewardOut> update(@RequestBody RewardIn rewardIn, @PathVariable Long id) {
-        RewardOut reward = rewardService.update(rewardIn, id);
+    public ResponseEntity<RewardOut> update(@AuthenticationPrincipal OAuth2AuthenticatedPrincipal principal ,@RequestBody RewardIn rewardIn, @PathVariable Long id) {
+        RewardOut reward = rewardService.update(id, principal.getAttribute("sub") ,rewardIn);
         return reward == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(reward);
     }
 

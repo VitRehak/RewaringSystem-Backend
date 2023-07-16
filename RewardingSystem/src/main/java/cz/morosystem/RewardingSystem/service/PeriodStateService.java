@@ -7,7 +7,6 @@ import cz.morosystem.RewardingSystem.model.in.PeriodStateIn;
 import cz.morosystem.RewardingSystem.model.out.PeriodStateOut;
 import cz.morosystem.RewardingSystem.repository.PeriodStateRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -17,14 +16,21 @@ import java.util.Optional;
 @Service
 public class PeriodStateService {
 
-    @Autowired
+    final
     PeriodStateRepository periodStateRepository;
-    @Autowired
+    final
     EmployeeService employeeService;
-    @Autowired
+    final
     PeriodService periodService;
-    @Autowired
+    final
     ModelMapper modelMapper;
+
+    public PeriodStateService(PeriodStateRepository periodStateRepository, EmployeeService employeeService, PeriodService periodService, ModelMapper modelMapper) {
+        this.periodStateRepository = periodStateRepository;
+        this.employeeService = employeeService;
+        this.periodService = periodService;
+        this.modelMapper = modelMapper;
+    }
 
     public List<PeriodStateOut> assignBudget(List<PeriodStateIn> periodStateIn) {
         Period period = periodService.currentPeriod();
@@ -47,16 +53,11 @@ public class PeriodStateService {
         if (periodStateDb.isPresent()) {
             PeriodState periodState = periodStateDb.get();
             periodStateOut = modelMapper.map(periodState, PeriodStateOut.class);
+            return periodStateOut;
         } else {
-            PeriodState periodState = new PeriodState();
-            periodState.setEmployeeId(employee.getId());
-            periodState.setBudget(0);
-            periodState.setPeriodId(periodService.currentPeriod().getId());
-            periodStateOut = modelMapper.map(periodStateRepository.save(periodState), PeriodStateOut.class);
+            return null;
         }
-        return periodStateOut;
     }
-
     public void updateStateBudget(int budget, String sub) {
         Employee employee = employeeService.getEmployee(sub);
         Long idPeriod = periodService.currentPeriod().getId();
@@ -64,13 +65,6 @@ public class PeriodStateService {
         if (periodStateDb.isPresent()) {
             PeriodState periodState = periodStateDb.get();
             periodState.setBudget(budget);
-        }
-        else {
-            try {
-                throw new Exception();
-            } catch (Exception e) {
-                throw new RuntimeException(e);
-            }
         }
     }
 }

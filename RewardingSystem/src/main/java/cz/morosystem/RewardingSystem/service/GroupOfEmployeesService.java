@@ -3,11 +3,9 @@ package cz.morosystem.RewardingSystem.service;
 import cz.morosystem.RewardingSystem.model.entity.Employee;
 import cz.morosystem.RewardingSystem.model.entity.GroupOfEmployees;
 import cz.morosystem.RewardingSystem.model.in.GroupOfEmployeesIn;
-import cz.morosystem.RewardingSystem.model.out.EmployeeOut;
 import cz.morosystem.RewardingSystem.model.out.GroupOfEmployeesOut;
 import cz.morosystem.RewardingSystem.repository.GroupOfEmployeesRepository;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,13 +14,18 @@ import java.util.Optional;
 @Service
 public class GroupOfEmployeesService {
 
-    @Autowired
+    final
     ModelMapper modelMapper;
-
-    @Autowired
+    final
     EmployeeService employeeService;
-    @Autowired
+    final
     GroupOfEmployeesRepository groupOfEmployeesRepository;
+
+    public GroupOfEmployeesService(ModelMapper modelMapper, EmployeeService employeeService, GroupOfEmployeesRepository groupOfEmployeesRepository) {
+        this.modelMapper = modelMapper;
+        this.employeeService = employeeService;
+        this.groupOfEmployeesRepository = groupOfEmployeesRepository;
+    }
 
 
     public List<GroupOfEmployeesOut> getMyGroups(String sub) {
@@ -67,22 +70,24 @@ public class GroupOfEmployeesService {
         return null;
     }
 
-    public List<Employee> getGroupMembers(Long id) {
-        Optional<GroupOfEmployees> dbGroupOfEmployees = groupOfEmployeesRepository.findById(id);
-        if (dbGroupOfEmployees.isPresent()) {
-            GroupOfEmployees groupOfEmployees = dbGroupOfEmployees.get();
-            return groupOfEmployees.getMembers();
-        }
-        return null;
-    }
+//    //NOT NEEDED
+//    public List<Employee> getGroupMembers(Long id) {
+//        Optional<GroupOfEmployees> dbGroupOfEmployees = groupOfEmployeesRepository.findById(id);
+//        if (dbGroupOfEmployees.isPresent()) {
+//            GroupOfEmployees groupOfEmployees = dbGroupOfEmployees.get();
+//            return groupOfEmployees.getMembers();
+//        }
+//        return null;
+//    }
 
-    public List<EmployeeOut> getGroupMembersOut(Long id) {
-        return getGroupMembers(id).stream().map(e -> modelMapper.map(e, EmployeeOut.class)).toList();
-    }
+//    //NOT NEEDED
+//    public List<EmployeeOut> getGroupMembersOut(Long id) {
+//        return getGroupMembers(id).stream().map(e -> modelMapper.map(e, EmployeeOut.class)).toList();
+//    }
 
     public GroupOfEmployees getGroup(Long id) {
         Optional<GroupOfEmployees> dbGroupOfEmployee = groupOfEmployeesRepository.findById(id);
-        return dbGroupOfEmployee.isPresent() ? dbGroupOfEmployee.get() : null;
+        return dbGroupOfEmployee.orElse(null);
 
     }
 }

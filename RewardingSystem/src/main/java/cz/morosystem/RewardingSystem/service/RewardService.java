@@ -49,20 +49,22 @@ public class RewardService {
         this.periodStateService = periodStateService;
     }
 
-    public List<RewardOut> getAllRewards() {
-        List<Reward> dbReward = rewardRepository.findAll();
-        return dbReward.stream().map(r -> modelMapper.map(r, RewardOut.class)).toList();
-    }
+//    //NOT NEEDED
+//    public List<RewardOut> getAllRewards() {
+//        List<Reward> dbReward = rewardRepository.findAll();
+//        return dbReward.stream().map(r -> modelMapper.map(r, RewardOut.class)).toList();
+//    }
 
     public RewardOut getRewardOut(Long id) {
         Optional<Reward> dbReward = rewardRepository.findById(id);
         return dbReward.map(reward -> modelMapper.map(reward, RewardOut.class)).orElse(null);
     }
 
-    public Reward getReward(Long id) {
-        Optional<Reward> dbReward = rewardRepository.findById(id);
-        return dbReward.orElse(null);
-    }
+//    //NOT NEEDED
+//    public Reward getReward(Long id) {
+//        Optional<Reward> dbReward = rewardRepository.findById(id);
+//        return dbReward.orElse(null);
+//    }
 
     public List<RewardOut> getAllMyRewards(String sub) {
         Employee employee = employeeService.getEmployee(sub);
@@ -131,25 +133,9 @@ public class RewardService {
 //        }
 //    }
 
-    public RewardOut update(RewardIn rewardIn, Long id) {
-
-        Optional<Reward> dbReward = rewardRepository.findById(id);
-        if (dbReward.isPresent()) {
-            Reward reward = dbReward.get();
-            if (!rewardIn.getIsGroup()) {
-                Employee receiver = employeeService.getEmployee(rewardIn.getReceiver());
-                reward.setReceiverEmployee(receiver);
-            } else {
-                GroupOfEmployees receiver = groupOfEmployeesService.getGroup(rewardIn.getReceiver());
-                reward.setReceiverGroup(receiver);
-            }
-
-            reward.setAmountOfMoney(rewardIn.getAmountOfMoney());
-            reward.setText(rewardIn.getText());
-            reward.setDraft(rewardIn.isDraft());
-            return modelMapper.map(rewardRepository.save(reward), RewardOut.class);
-        }
-        return null;
+    public RewardOut update(Long id, String sub, RewardIn rewardIn) {
+        delete(id,sub);
+        return createReward(rewardIn, sub);
     }
 
 //    public List<RewardOut> createMultipleRewards(RewardForGroup rewardForGroup, String sub) {

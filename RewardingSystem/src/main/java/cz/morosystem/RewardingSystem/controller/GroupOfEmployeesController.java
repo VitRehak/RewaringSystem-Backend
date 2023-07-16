@@ -1,11 +1,9 @@
 package cz.morosystem.RewardingSystem.controller;
 
 import cz.morosystem.RewardingSystem.model.in.GroupOfEmployeesIn;
-import cz.morosystem.RewardingSystem.model.out.EmployeeOut;
 import cz.morosystem.RewardingSystem.model.out.GroupOfEmployeesOut;
 import cz.morosystem.RewardingSystem.service.GroupOfEmployeesService;
 import jakarta.transaction.Transactional;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -18,8 +16,12 @@ import java.util.List;
 @RequestMapping(path = "/groupOfEmployees")
 public class GroupOfEmployeesController {
 
-    @Autowired
+    final
     GroupOfEmployeesService groupOfEmployeesService;
+
+    public GroupOfEmployeesController(GroupOfEmployeesService groupOfEmployeesService) {
+        this.groupOfEmployeesService = groupOfEmployeesService;
+    }
 
 
     //MY GROUPS
@@ -66,9 +68,9 @@ public class GroupOfEmployeesController {
     //////////////////////////////NOT NEEDED NOW////////////////////////////////////////
 
 
-    @GetMapping(path = "/groupMembers/{id}", produces = "application/json")
-    public ResponseEntity<List<EmployeeOut>> groupMembers(@PathVariable Long id) {
-        List<EmployeeOut> employeeOuts = groupOfEmployeesService.getGroupMembersOut(id);
-        return employeeOuts == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(employeeOuts);
-    }
+//    @GetMapping(path = "/groupMembers/{id}", produces = "application/json")
+//    public ResponseEntity<List<EmployeeOut>> groupMembers(@PathVariable Long id) {
+//        List<EmployeeOut> employeeOuts = groupOfEmployeesService.getGroupMembersOut(id);
+//        return employeeOuts == null ? ResponseEntity.notFound().build() : ResponseEntity.ok(employeeOuts);
+//    }
 }
